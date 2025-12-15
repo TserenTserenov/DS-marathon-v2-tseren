@@ -80,10 +80,14 @@ jobs:
 
       - name: Generate summary via LLM
         id: llm
+        continue-on-error: true
         env:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
         shell: bash
         run: |
+          set +e
+          mkdir -p .tmp
+          log_file=".tmp/llm.log"
           python3 - << 'PY'
           import os, json, pathlib, textwrap, datetime, urllib.request
 
@@ -147,6 +151,48 @@ jobs:
           print("Wrote .tmp/summary.md")
           PY
 
+          status=$?
+          echo "llm_status=$status" >> "$GITHUB_OUTPUT"
+          echo "LLM step finished with status $status" >> "$log_file"
+          if [ $status -ne 0 ]; then
+            echo "LLM шаг завершился с ошибкой, см. лог." >> "$log_file"
+          fi
+      - name: Build fallback summary
+        if: always()
+        env:
+          LLM_STATUS: ${{ steps.llm.outputs.llm_status || '1' }}
+        shell: bash
+        run: |
+          mkdir -p .tmp
+          summary_exists=0
+          if [ -s .tmp/summary.md ] && [ "${LLM_STATUS}" = "0" ]; then
+            summary_exists=1
+          fi
+
+          if [ $summary_exists -eq 0 ]; then
+            log="$(cat .tmp/llm.log 2>/dev/null || echo "Лог отсутствует.")"
+            commits="$(cat .tmp/commits.txt 2>/dev/null || echo "нет")"
+            diff_size="$(wc -c < .tmp/diff.patch 2>/dev/null || echo "0")"
+
+            {
+              echo "# Ежедневная сводка — $(date -I)"
+              echo
+              echo "⚠️ LLM шаг не прошёл (код ${LLM_STATUS:-неизвестно})."
+              echo
+              echo "Лог (последние 200 строк):"
+              echo '```'
+              printf '%s\n' "$log" | tail -n 200
+              echo '```'
+              echo
+              echo "Коммиты за 24 часа:"
+              echo '```'
+              printf '%s\n' "$commits"
+              echo '```'
+              echo
+              echo "Размер diff (байт): ${diff_size}"
+            } > .tmp/summary.md
+          fi
+
       - name: Create Issue (daily summary)
         uses: actions/github-script@v7
         with:
@@ -163,8 +209,8 @@ jobs:
               labels: 'daily-summary',
               per_page: 50
             });
-            const exists = issues.some(i => i.title.includes(today));
-            if (!exists) {
+            const existing = issues.find(i => i.title.includes(today));
+            if (!existing) {
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -173,5 +219,11 @@ jobs:
                 labels: ['daily-summary', 'автоматика']
               });
             } else {
-              core.info(`Issue for ${today} already exists, skipping.`);
+              core.info(`Issue for ${today} already exists (##${existing.number}), adding comment.`);
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body: body
+              });
             }
