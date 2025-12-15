@@ -26,11 +26,42 @@ jobs:
         shell: bash
         run: |
           set +e
+          mkdir -p .tmp
           chmod +x scripts/check-integrity.sh
-          bash scripts/check-integrity.sh
-          exit_code=$?
+          bash scripts/check-integrity.sh |& tee .tmp/health.log
+          exit_code=${PIPESTATUS[0]}
           echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
           exit 0
+
+      - name: Ensure report exists
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p reports
+          today="$(date -u +%F)"
+          exit_code="${{ steps.hc.outputs.exit_code }}"
+          shopt -s nullglob
+          reports=(reports/health-check-*.md)
+          shopt -u nullglob
+          if [ ${#reports[@]} -eq 0 ]; then
+            log_tail="(log not found)"
+            if [ -f .tmp/health.log ]; then
+              log_tail=$(tail -n 20 .tmp/health.log)
+            fi
+            {
+              echo "# Health Check Report (${today})"
+              echo
+              echo "- Status: ${exit_code:-unknown}"
+              echo "- Generated: $today (fallback)"
+              echo
+              echo "## Last 20 lines of log"
+              echo '```'
+              echo "${log_tail}"
+              echo '```'
+              echo
+              echo "> Отчёт не был сгенерирован скриптом, создан fallback"
+            } > "reports/health-check-${today}.md"
+          fi
 
       - name: Upload report
         if: always()
