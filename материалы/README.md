@@ -1,6 +1,6 @@
 ---
+status: "yellow"
 title: "Материалы Марафона 2.0"
-status: yellow
 owner: "Управляющий сети Александр"
 last_reviewed: "2025-12-15"
 next_review: "2026-03-15"
