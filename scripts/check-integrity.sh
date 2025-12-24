@@ -115,43 +115,85 @@ echo "🔗 Проверка ссылок..."
 echo ""
 
 # Функция проверки битых ссылок
+# Helper: Check if a link is external (http/https) or anchor-only
+is_external_link() {
+    local link=$1
+    [[ "$link" == http* ]] || [[ "$link" == \#* ]]
+}
+
+# Helper: Extract link target from markdown link syntax [text](target)
+extract_link_target() {
+    local link=$1
+    local target
+
+    target=$(echo "$link" | sed -E 's/.*\(([^)]+)\).*/\1/')
+    # Remove anchors to check file existence correctly
+    echo "${target%%#*}"
+}
+
+# Helper: Resolve full path for a link relative to source file
+resolve_link_path() {
+    local source_file=$1
+    local target=$2
+    local dir
+
+    dir=$(dirname "$source_file")
+    echo "$dir/$target"
+}
+
+# Helper: Check if a single link target exists
+check_single_link() {
+    local source_file=$1
+    local link=$2
+    local target
+    local full_path
+
+    target=$(extract_link_target "$link")
+
+    # Skip empty targets
+    [[ -z "$target" ]] && return 0
+
+    # Skip external links
+    is_external_link "$target" && return 0
+
+    # Check if target exists
+    full_path=$(resolve_link_path "$source_file" "$target")
+    if [[ ! -f "$full_path" && ! -d "$full_path" ]]; then
+        warn "Битая ссылка в $source_file" "Ссылка на несуществующий файл: $target"
+        return 1
+    fi
+
+    return 0
+}
+
+# Helper: Check all links in a single file
+check_file_links() {
+    local file=$1
+    local broken_count=0
+    local link
+
+    while IFS= read -r link; do
+        if ! check_single_link "$file" "$link"; then
+            broken_count=$((broken_count + 1))
+        fi
+    done < <(grep -o '\[.*\]([^)]*)' "$file" 2>/dev/null || true)
+
+    echo "$broken_count"
+}
+
+# Main function: Check all markdown links in the repository
 check_links() {
     local broken_links=0
-    
-    # Находим все .md файлы
+    local file_broken
+
+    # Process each markdown file
     while IFS= read -r file; do
-        # Ищем все markdown ссылки вида [text](link.md)
-        while IFS= read -r link; do
-            # Извлекаем путь к файлу
-            target=$(echo "$link" | sed -E 's/.*\(([^)]+)\).*/\1/')
-
-            # Убираем якоря, чтобы корректно проверять существование файла
-            target=${target%%#*}
-
-            if [[ -z $target ]]; then
-                continue
-            fi
-
-            # Пропускаем внешние ссылки
-            if [[ "$target" == http* ]] || [[ "$target" == \#* ]]; then
-                continue
-            fi
-            
-            # Получаем директорию текущего файла
-            dir=$(dirname "$file")
-            
-            # Формируем полный путь
-            full_path="$dir/$target"
-            
-            # Проверяем существование
-            if [[ ! -f $full_path && ! -d $full_path ]]; then
-                warn "Битая ссылка в $file" "Ссылка на несуществующий файл: $target"
-                broken_links=$((broken_links + 1))
-            fi
-        done < <(grep -o '\[.*\]([^)]*)' "$file" 2>/dev/null || true)
+        file_broken=$(check_file_links "$file")
+        broken_links=$((broken_links + file_broken))
     done < <(find . -name "*.md" -type f)
-    
-    if [ $broken_links -eq 0 ]; then
+
+    # Report success if no broken links found
+    if [ "$broken_links" -eq 0 ]; then
         info "Все внутренние ссылки работают"
     fi
 }
