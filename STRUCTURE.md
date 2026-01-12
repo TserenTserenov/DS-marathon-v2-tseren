@@ -57,11 +57,11 @@ metamaterial/
 materials/
 ├── participants/                   # Материалы для участников
 │   ├── README.md
-│   ├── 01_questionnaire.md         # Опросник
-│   ├── 02_meeting_1.md             # Встреча 1
-│   ├── 03_meeting_2.md             # Встреча 2
-│   ├── 04_meeting_3.md             # Встреча 3
-│   └── 05_meeting_4.md             # Встреча 4
+│   ├── 00_questionnaire.md         # Опросник
+│   ├── 01_meeting_1.md             # Встреча 1
+│   ├── 02_meeting_2.md             # Встреча 2
+│   ├── 03_meeting_3.md             # Встреча 3
+│   └── 04_meeting_4.md             # Встреча 4
 └── mentor/                         # Материалы для наставников
     ├── README.md
     ├── 01_questionnaire_mentor.md  # Опросник (методичка)
@@ -76,7 +76,7 @@ materials/
 
 ## Навигация для участников
 
-1. Начинают с **materials/participants/01_questionnaire.md** и определяют состояние
+1. Начинают с **materials/participants/00_questionnaire.md** и определяют состояние
 2. Сверяются с **metamaterial/понятия.md**, чтобы говорить на одном языке
 3. Готовятся к встречам, двигаясь по файлам в **materials/participants/** (02-05_meeting)
 4. Пользуются готовыми шаблонами из **metamaterial/participants/templates/**
