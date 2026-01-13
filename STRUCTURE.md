@@ -46,7 +46,7 @@ metamaterial/
 │       └── stop-moment-checklist.md # Чеклист стоп-момента
 └── mentor/                         # Инструменты для наставников
     ├── README.md
-    └── prompt-for-ai-agent.md      # Промт для ИИ-диагностики
+    └── prompt-for-ai-agent.md      # Промт для ИИ-диагностики (единый источник)
 ```
 
 ## Директория `materials/`

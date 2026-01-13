@@ -181,7 +181,7 @@
 - Если хочет дополнительной диагностики
 - Если готов работать с технологиями
 
-**Материал:** [prompt-for-ai-agent.md](prompt-for-ai-agent.md)
+**Материал:** [prompt-for-ai-agent.md](../../metamaterial/mentor/prompt-for-ai-agent.md)
 
 ### Практики на период до Встречи 2
 
@@ -254,7 +254,7 @@
   - материалы про практики
 - [ ] Проверено наличие ссылки на [Руководство по саморазвитию](https://aisystant.system-school.ru/lk/#/course/intro-online-2021/2025-09-07T1026/71215)
 - [ ] Проверено наличие файла [01-02_self-study.md](../participants/01-02_self-study.md) для отправки участнику
-- [ ] Настроен доступ к prompt-for-ai-agent.md (если может понадобиться)
+- [ ] Настроен доступ к prompt-for-ai-agent.md (если может понадобиться) → [ссылка на документацию](../../metamaterial/mentor/prompt-for-ai-agent.md)
 
 ---
 
