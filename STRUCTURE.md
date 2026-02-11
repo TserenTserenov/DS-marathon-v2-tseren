@@ -46,17 +46,20 @@ metamaterial/
 │       └── stop-moment-checklist.md # Чеклист стоп-момента
 └── mentor/                         # Инструменты для наставников
     ├── README.md
-    └── prompt-for-ai-agent.md      # Промт для ИИ-диагностики
+    └── prompt-for-ai-agent.md      # Промт для ИИ-диагностики (единый источник)
 ```
 
 ## Директория `materials/`
 
 Линейные методические материалы для работы (читаются последовательно).
 
+**Важно:** Весь материал марафона выдаётся участникам через Telegram-бота [@aist_pilot_bot](https://t.me/aist_pilot_bot).
+
 ```
 materials/
 ├── participants/                   # Материалы для участников
 │   ├── README.md
+│   ├── BOT_PROGRAM.md              # Программа обучения в боте (темы по дням)
 │   ├── 00_questionnaire.md         # Опросник
 │   ├── 01_meeting_1.md             # Встреча 1
 │   ├── 02_meeting_2.md             # Встреча 2
@@ -65,10 +68,10 @@ materials/
 └── mentor/                         # Материалы для наставников
     ├── README.md
     ├── 01_questionnaire_mentor.md  # Опросник (методичка)
-    ├── 02_meeting_1_mentor.md      # Встреча 1 (методичка)
-    ├── 03_meeting_2_mentor.md      # Встреча 2 (методичка)
-    ├── 04_meeting_3_mentor.md      # Встреча 3 (методичка)
-    ├── 05_meeting_4_mentor.md      # Встреча 4 (методичка)
+    ├── 01_meeting_1_mentor.md      # Встреча 1 (методичка)
+    ├── 02_meeting_2_mentor.md      # Встреча 2 (методичка)
+    ├── 03_meeting_3_mentor.md      # Встреча 3 (методичка)
+    ├── 04_meeting_4_mentor.md      # Встреча 4 (методичка)
     └── methodology/                # Методологические материалы
 ```
 
@@ -76,18 +79,20 @@ materials/
 
 ## Навигация для участников
 
-1. Начинают с **materials/participants/00_questionnaire.md** и определяют состояние
-2. Сверяются с **metamaterial/понятия.md**, чтобы говорить на одном языке
-3. Готовятся к встречам, двигаясь по файлам в **materials/participants/** (02-05_meeting)
-4. Пользуются готовыми шаблонами из **metamaterial/participants/templates/**
-5. Изучают методологию в **metamaterial/** (состояния-и-методы, минимальные-практики)
+1. **Запускают бота** [@aist_pilot_bot](https://t.me/aist_pilot_bot) — основной способ изучения материала
+2. Смотрят программу обучения в **materials/participants/BOT_PROGRAM.md**
+3. Проходят опросник **materials/participants/00_questionnaire.md** и определяют состояние
+4. Сверяются с **metamaterial/понятия.md**, чтобы говорить на одном языке
+5. Готовятся к встречам, двигаясь по файлам в **materials/participants/** (01-04_meeting)
+6. Пользуются готовыми шаблонами из **metamaterial/participants/templates/**
 
 ---
 
 ## Навигация для наставников
 
 - Базовая ориентация — **materials/mentor/README.md**
-- Сценарии встреч и методички лежат в **materials/mentor/** (01-05_meeting_mentor)
+- Программа бота — **materials/participants/BOT_PROGRAM.md** (понять путь участника)
+- Сценарии встреч и методички лежат в **materials/mentor/** (01-04_meeting_mentor)
 - Инструменты диагностики и промты — в **metamaterial/mentor/**
 - Методологическая база — в **metamaterial/** (понятия, состояния, источник-правды)
 
