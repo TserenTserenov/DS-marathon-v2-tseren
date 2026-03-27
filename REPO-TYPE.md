@@ -9,7 +9,7 @@
 ## Upstream dependencies
 
 - [aisystant/PACK-personal](https://github.com/aisystant/PACK-personal) — знания о созидателе
-- [TserenTserenov/PACK-ecosystem](https://github.com/TserenTserenov/PACK-ecosystem) — знания об экосистеме
+- PACK-ecosystem — знания об экосистеме (приватный)
 
 ## Downstream outputs
 
