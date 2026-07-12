@@ -10,6 +10,8 @@ next_review: "2026-04-09"
 
 Готовые тексты и шаблоны для наставников при привлечении участников на марафон.
 
+**Перед правкой текста (WP-480):** сверить тон с сегментом из карты целевых аудиторий экосистемы (`DS-ecosystem-development/A.Systems-Builder/A1.Teams-and-Communities/A1.1.Meaning/1.1.2. Marketing/audiences/`) и, где уместно (особенно `objections-and-answers.md`, `social-media.md`), опереться на продуктивный мем / разобрать непродуктивный из каталога `PACK-systems-art/pack/systems-art/02-domain-entities/catalogs/SA.CAT.001-memes-catalog.md` — не называя код мема в тексте для наставников.
+
 ---
 
 ## 📋 Содержание
